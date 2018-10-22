@@ -23,9 +23,10 @@ def fft(x):
     return [even[k] + T[k] for k in range(N//2)] + \
            [even[k] - T[k] for k in range(N//2)]
 
+cap = cv2.VideoCapture('2017-09-14 21.53.59.mp4')
 
-cwd = os.getcwd()
-cap = cv2.VideoCapture(cwd + '/../src/2017-09-14 21.53.59.mp4')
+# cap = cv2.VideoCapture('martina-arco(25seg).mp4')
+
 
 #if not cap.isOpened(): 
 #    print("No lo pude abrir")
@@ -43,12 +44,12 @@ b = np.zeros((1,length))
 k = 0
 while(cap.isOpened()):
     ret, frame = cap.read()
+    # resize = cv2.resize(frame, (720, 1280), cv2.INTER_LINEAR)
     
     if ret == True:
         r[0,k] = np.mean(frame[330:360,610:640,0])
         g[0,k] = np.mean(frame[330:360,610:640,1])
         b[0,k] = np.mean(frame[330:360,610:640,2])
-#        print(k)
     else:
         break
     k = k + 1
