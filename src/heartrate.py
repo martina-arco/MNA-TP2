@@ -72,12 +72,13 @@ B = np.abs(np.fft.fftshift(fft(b)))**2
 plt.plot(60*f,R)
 plt.xlim(0,200)
 
-
 plt.plot(60*f,G)
 plt.xlim(0,200)
 plt.xlabel("frecuencia [1/minuto]")
 
 plt.plot(60*f,B)
 plt.xlim(0,200)
+
+plt.show()
 
 print("Frecuencia cardíaca: ", abs(f[np.argmax(G)])*60, " pulsaciones por minuto")
