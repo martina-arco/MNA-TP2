@@ -27,7 +27,6 @@ def fft(x):
            [even[k] - T[k] for k in range(N//2)]
 
 def filter(fft, frequencies):
-    print("HOLA")
     result = []
     for i in range(len(frequencies)):
         if 40 <= frequencies[i] <= 120:
@@ -37,8 +36,8 @@ def filter(fft, frequencies):
 
     return result
 
-# cap = cv2.VideoCapture('2017-09-14 21.53.59.mp4')
-cap = cv2.VideoCapture('mimi.mp4')
+cap = cv2.VideoCapture('2017-09-14 21.53.59.mp4')
+# cap = cv2.VideoCapture('mimi.mp4')
 # cap = cv2.VideoCapture('p.mp4')
 
 
@@ -65,14 +64,11 @@ right_bound = width//2 + size//2
 upper_bound = height//2 + size//2
 lower_bound = height//2 - size//2
 
-start_time = 0
-end_time = -1
 
 k = 0
 while(cap.isOpened()):
     ret, frame = cap.read()
-    # resize = cv2.resize(frame, (720, 1280), cv2.INTER_LINEAR)
-    
+
     if ret == True:
         r[0,k] = np.mean(frame[left_bound:right_bound, lower_bound:upper_bound,0])
         g[0,k] = np.mean(frame[left_bound:right_bound, lower_bound:upper_bound,1])
@@ -99,8 +95,6 @@ B = np.abs(np.fft.fftshift(fft(b)))**2
 R_filter=filter(R,f*60)
 G_filter=filter(G,f*60)
 B_filter=filter(B,f*60)
-
-print("R filter:",R_filter)
 
 
 heartrate_R=abs(f[np.argmax(R_filter)])*60
