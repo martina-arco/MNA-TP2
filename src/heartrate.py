@@ -26,6 +26,17 @@ def fft(x):
     return [even[k] + T[k] for k in range(N//2)] + \
            [even[k] - T[k] for k in range(N//2)]
 
+def filter(fft, frequencies):
+    print("HOLA")
+    result = []
+    for i in range(len(frequencies)):
+        if 40 <= frequencies[i] <= 120:
+            result.append(fft[i])
+        else:
+            result.append(0)
+
+    return result
+
 # cap = cv2.VideoCapture('2017-09-14 21.53.59.mp4')
 cap = cv2.VideoCapture('mimi.mp4')
 # cap = cv2.VideoCapture('p.mp4')
@@ -112,5 +123,6 @@ plt.show()
 print("Frecuencia cardíaca: ", heartrate_R, " pulsaciones por minuto")
 print("Frecuencia cardíaca: ", heartrate_G, " pulsaciones por minuto")
 print("Frecuencia cardíaca: ", heartrate_B, " pulsaciones por minuto")
+
 
 
