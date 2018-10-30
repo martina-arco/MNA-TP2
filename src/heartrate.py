@@ -36,13 +36,13 @@ def filter(fft, frequencies):
 
     return result
 
-cap = cv2.VideoCapture('2017-09-14 21.53.59.mp4')
+# cap = cv2.VideoCapture('2017-09-14 21.53.59.mp4')
 # cap = cv2.VideoCapture('mimi.mp4')
 # cap = cv2.VideoCapture('p.mp4')
 
 
 # cap = cv2.VideoCapture('martina-arco(25seg).mp4')
-# cap = cv2.VideoCapture('sentada.mp4')
+cap = cv2.VideoCapture('sentada.mp4')
 
 
 if not cap.isOpened():
@@ -52,17 +52,17 @@ length = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 width  = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
 height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 fps    = cap.get(cv2.CAP_PROP_FPS)
-size=30 #puede pasarse por parametro, sino ponemos esta por default
+size=30
 
 
 r = np.zeros((1,length))
 g = np.zeros((1,length))
 b = np.zeros((1,length))
 
-left_bound = width//2 - size//2
-right_bound = width//2 + size//2
-upper_bound = height//2 + size//2
-lower_bound = height//2 - size//2
+left= width//2 - size//2
+right= width//2 + size//2
+up = height//2 + size//2
+down= height//2 - size//2
 
 
 k = 0
@@ -70,9 +70,9 @@ while(cap.isOpened()):
     ret, frame = cap.read()
 
     if ret == True:
-        r[0,k] = np.mean(frame[left_bound:right_bound, lower_bound:upper_bound,0])
-        g[0,k] = np.mean(frame[left_bound:right_bound, lower_bound:upper_bound,1])
-        b[0,k] = np.mean(frame[left_bound:right_bound, lower_bound:upper_bound,2])
+        r[0,k] = np.mean(frame[left:right, down:up,0])
+        g[0,k] = np.mean(frame[left:right, down:up,1])
+        b[0,k] = np.mean(frame[left:right, down:up,2])
     else:
         break
     k = k + 1
