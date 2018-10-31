@@ -4,6 +4,8 @@ Created on Sat Sep 16 19:23:10 2017
 
 @author: pfierens
 """
+import parser
+import argparse
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -38,11 +40,15 @@ def filter(fft, frequencies):
 
 # cap = cv2.VideoCapture('2017-09-14 21.53.59.mp4')
 # cap = cv2.VideoCapture('mimi.mp4')
-# cap = cv2.VideoCapture('p.mp4')
-
-
+cap = cv2.VideoCapture('noled.mp4')
 # cap = cv2.VideoCapture('martina-arco(25seg).mp4')
-cap = cv2.VideoCapture('sentada.mp4')
+# cap = cv2.VideoCapture('sentada.mp4')
+# cap = cv2.VideoCapture('correr.mp4')
+parser = argparse.ArgumentParser(description='Argumentos.')
+parser.add_argument("--size",type=int, default=30)
+parser.add_argument("--total",type=bool, default=False)
+args = parser.parse_args()
+
 
 
 if not cap.isOpened():
@@ -52,7 +58,10 @@ length = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 width  = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
 height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 fps    = cap.get(cv2.CAP_PROP_FPS)
-size=30
+size=args.size
+total=args.total
+print("Size:",size,"Total:",total)
+
 
 
 r = np.zeros((1,length))
@@ -70,9 +79,15 @@ while(cap.isOpened()):
     ret, frame = cap.read()
 
     if ret == True:
-        r[0,k] = np.mean(frame[left:right, down:up,0])
-        g[0,k] = np.mean(frame[left:right, down:up,1])
-        b[0,k] = np.mean(frame[left:right, down:up,2])
+        if total==False:
+
+            r[0,k] = np.mean(frame[left:right, down:up,0])
+            g[0,k] = np.mean(frame[left:right, down:up,1])
+            b[0,k] = np.mean(frame[left:right, down:up,2])
+        else:
+            r[0, k] = np.mean(frame[0:width, 0:height, 0])
+            g[0, k] = np.mean(frame[0:width, 0:height, 1])
+            b[0, k] = np.mean(frame[0:width, 0:height, 2])
     else:
         break
     k = k + 1
@@ -80,7 +95,6 @@ while(cap.isOpened()):
 
 cap.release()
 cv2.destroyAllWindows()
-
 n = int(2 ** np.floor(np.log2(length)))
 f = np.linspace(-n/2,n/2-1,n)*fps/n
 
@@ -101,6 +115,7 @@ heartrate_R=abs(f[np.argmax(R_filter)])*60
 heartrate_G=abs(f[np.argmax(G_filter)])*60
 heartrate_B=abs(f[np.argmax(B_filter)])*60
 
+plt.suptitle("FFT")
 
 plt.plot(60*f,R)
 plt.xlim(0,200)
@@ -114,9 +129,9 @@ plt.xlim(0,200)
 
 plt.show()
 
-print("Frecuencia cardíaca: ", heartrate_R, " pulsaciones por minuto")
-print("Frecuencia cardíaca: ", heartrate_G, " pulsaciones por minuto")
-print("Frecuencia cardíaca: ", heartrate_B, " pulsaciones por minuto")
+print("Frecuencia cardíaca R: ", heartrate_R, " pulsaciones por minuto")
+print("Frecuencia cardíaca G: ", heartrate_G, " pulsaciones por minuto")
+print("Frecuencia cardíaca B: ", heartrate_B, " pulsaciones por minuto")
 
 
 
